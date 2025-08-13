@@ -55,6 +55,15 @@
       .section-title::after {
         @apply content-[''] absolute w-1/2 h-1 bg-primary left-0 bottom-[-8px] rounded-full;
       }
+      /* 添加英雄区域图标动画 */
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      .fa-wrench {
+        animation: pulse 3s infinite;
+      }
     }
   </style>
 </head>
@@ -69,9 +78,7 @@
       </div>
       
       <nav class="hidden md:flex items-center space-x-6">
-        <a href="#string-generator" class="font-medium hover:text-primary transition-colors">字符串生成</a>
-        <a href="#length-calculator" class="font-medium hover:text-primary transition-colors">长度计算</a>
-        <a href="#barcode-generator" class="font-medium hover:text-primary transition-colors">条形码生成</a>
+        <!-- 导航按钮已移除 -->
       </nav>
       
       <button class="md:hidden text-dark text-xl" id="menu-toggle">
@@ -90,73 +97,219 @@
   </header>
 
   <!-- 英雄区域 -->
-  <section class="bg-gradient-to-br from-primary to-accent text-white py-16 md:py-24">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold mb-6 leading-tight">
-        专业软件测试工具集
-      </h2>
-      <p class="text-[clamp(1rem,2vw,1.25rem)] max-w-2xl mx-auto mb-8 opacity-90">
-        提供随机字符串生成、字符长度计算和批量条形码生成等实用功能，
-        帮助测试人员高效完成工作
-      </p>
-      <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a href="#string-generator" class="bg-white text-primary hover:bg-gray-100 font-medium py-3 px-6 rounded-lg transition-all duration-200">
-          开始使用 <i class="fa fa-arrow-right ml-2"></i>
-        </a>
-        <a href="#features" class="bg-transparent border-2 border-white hover:bg-white/10 font-medium py-3 px-6 rounded-lg transition-all duration-200">
-          了解功能
-        </a>
-      </div>
+  <section class="relative h-[50vh] md:h-[60vh] overflow-hidden flex items-center justify-center">
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 opacity-80"></div>
+    <!-- 抽象几何图形装饰 -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute top-[10%] left-[15%] w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+      <div class="absolute top-[20%] right-[10%] w-72 h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+      <div class="absolute bottom-[15%] left-[20%] w-60 h-60 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
     </div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <i class="fa fa-wrench text-white text-6xl md:text-8xl mb-6"></i>
+      <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white mb-2">测试工具集</h2>
+    </div>
+    <style>
+      /* 动画效果 */
+      @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+      }
+      .animate-blob {
+        animation: blob 7s infinite;
+      }
+      .animation-delay-2000 {
+        animation-delay: 2s;
+      }
+      .animation-delay-4000 {
+        animation-delay: 4s;
+      }
+    </style>
   </section>
 
-  <!-- 功能概览 -->
-  <section id="features" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <h2 class="section-title mx-auto text-center">核心功能</h2>
-      
-      <div class="grid md:grid-cols-3 gap-8 mt-12">
-        <!-- 功能卡片1 -->
-        <div class="tool-card text-center">
-          <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fa fa-random text-primary text-2xl"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">随机字符串生成</h3>
-          <p class="text-gray-600">
-            生成各种格式的随机字符串，支持自定义长度、字符类型和格式，满足不同测试场景需求。
-          </p>
-        </div>
-        
-        <!-- 功能卡片2 -->
-        <div class="tool-card text-center">
-          <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fa fa-arrows-h text-secondary text-2xl"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">字符长度计算</h3>
-          <p class="text-gray-600">
-            快速计算输入文本的字符长度，支持各种特殊字符和多字节字符的准确计数。
-          </p>
-        </div>
-        
-        <!-- 功能卡片3 -->
-        <div class="tool-card text-center">
-          <div class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fa fa-barcode text-accent text-2xl"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-3">批量条形码生成</h3>
-          <p class="text-gray-600">
-            批量生成标准条形码，支持自定义内容和数量，可直接下载使用。
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- 功能概览已移除 -->
 
   <!-- 工具区域 -->
   <section class="py-16 bg-gray-50">
     <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">实用工具集</h2>
+      <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+        我们提供多种实用工具，帮助您更高效地完成工作和学习任务。所有工具完全免费，无需安装，即开即用。
+      </p>
+
+      <!-- 工具选项卡 -->
+      <div class="mb-10">
+        <div class="flex overflow-x-auto space-x-2 pb-2 scrollbar-hide">
+          <button class="tool-tab active whitespace-nowrap px-6 py-3 bg-primary text-white rounded-lg shadow-sm" data-target="id-card-generator">
+            <i class="fa fa-id-card mr-2"></i> 证件号码生成
+          </button>
+          <button class="tool-tab whitespace-nowrap px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg shadow-sm transition-colors" data-target="phone-generator">
+            <i class="fa fa-mobile mr-2"></i> 手机号生成
+          </button>
+          <button class="tool-tab whitespace-nowrap px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg shadow-sm transition-colors" data-target="json-parser">
+            <i class="fa fa-code mr-2"></i> JSON解析
+          </button>
+          <button class="tool-tab whitespace-nowrap px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg shadow-sm transition-colors" data-target="string-generator">
+            <i class="fa fa-random mr-2"></i> 随机字符串
+          </button>
+          <button class="tool-tab whitespace-nowrap px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg shadow-sm transition-colors" data-target="length-calculator">
+            <i class="fa fa-calculator mr-2"></i> 字符计算
+          </button>
+          <button class="tool-tab whitespace-nowrap px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg shadow-sm transition-colors" data-target="barcode-generator">
+            <i class="fa fa-barcode mr-2"></i> 条形码生成
+          </button>
+        </div>
+      </div>
+
+      <!-- 证件号码生成器 -->
+      <div id="id-card-generator" class="tool-content mb-20 block">
+        <h2 class="section-title">证件号码生成器</h2>
+        
+        <div class="tool-card mt-8">
+          <div class="grid md:grid-cols-12 gap-8">
+            <div class="md:col-span-5">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 font-medium mb-2">
+                    证件类型
+                  </label>
+                  <div class="grid grid-cols-2 gap-3">
+                    <button class="id-type-btn bg-primary text-white py-2 px-4 rounded-lg" data-type="id">
+                      身份证
+                    </button>
+                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="hk">
+                      港澳居住证
+                    </button>
+                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="tw">
+                      台湾居住证
+                    </button>
+                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="foreign">
+                      外国人居留证
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-gray-700 font-medium mb-2" for="id-count">
+                    生成数量
+                  </label>
+                  <input type="number" id="id-count" class="input-field" min="1" max="50" value="1">
+                </div>
+
+                <div class="flex space-x-3">
+                  <button id="generate-ids" class="btn-primary flex-1 flex items-center justify-center">
+                    <i class="fa fa-id-card mr-2"></i> 生成证件号码
+                  </button>
+                  <button id="copy-ids" class="btn-secondary flex-1 flex items-center justify-center" disabled>
+                    <i class="fa fa-copy mr-2"></i> 复制所有
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-7">
+              <label class="block text-gray-700 font-medium mb-2">
+                生成结果
+              </label>
+              <div class="border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto bg-gray-50" id="id-results">
+                <div class="text-gray-500 italic text-center py-10">
+                  选择证件类型并点击生成按钮
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 手机号生成器 -->
+      <div id="phone-generator" class="tool-content mb-20 hidden">
+        <h2 class="section-title">手机号生成器</h2>
+        
+        <div class="tool-card mt-8">
+          <div class="grid md:grid-cols-12 gap-8">
+            <div class="md:col-span-5">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 font-medium mb-2" for="phone-count">
+                    生成数量
+                  </label>
+                  <input type="number" id="phone-count" class="input-field" min="1" max="50" value="5">
+                </div>
+
+                <div class="flex items-center">
+                  <input type="checkbox" id="include-carrier" class="w-4 h-4 text-primary" checked>
+                  <label for="include-carrier" class="ml-2 text-gray-700">显示运营商信息</label>
+                </div>
+
+                <div class="flex space-x-3">
+                  <button id="generate-phones" class="btn-primary flex-1 flex items-center justify-center">
+                    <i class="fa fa-mobile mr-2"></i> 生成手机号
+                  </button>
+                  <button id="copy-phones" class="btn-secondary flex-1 flex items-center justify-center" disabled>
+                    <i class="fa fa-copy mr-2"></i> 复制所有
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-7">
+              <label class="block text-gray-700 font-medium mb-2">
+                生成结果
+              </label>
+              <div class="border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto bg-gray-50" id="phone-results">
+                <div class="text-gray-500 italic text-center py-10">
+                  点击生成按钮开始创建手机号
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JSON解析器 -->
+      <div id="json-parser" class="tool-content mb-20 hidden">
+        <h2 class="section-title">JSON在线解析</h2>
+        
+        <div class="tool-card mt-8">
+          <div class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-8">
+              <div>
+                <label class="block text-gray-700 font-medium mb-2" for="json-input">
+                  JSON输入
+                </label>
+                <textarea id="json-input" class="input-field h-64 resize-none" placeholder="请输入JSON字符串..."></textarea>
+              </div>
+              <div>
+                <label class="block text-gray-700 font-medium mb-2" for="json-output">
+                  格式化结果
+                </label>
+                <div class="border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto bg-gray-50 font-mono text-sm" id="json-output">
+                  <div class="text-gray-500 italic text-center py-10">
+                    输入JSON并点击格式化按钮
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex space-x-4 justify-center">
+              <button id="format-json" class="btn-primary flex items-center">
+                <i class="fa fa-code mr-2"></i> 格式化JSON
+              </button>
+              <button id="minify-json" class="btn-secondary flex items-center" disabled>
+                <i class="fa fa-compress mr-2"></i> 压缩JSON
+              </button>
+              <button id="copy-json" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center" disabled>
+                <i class="fa fa-copy mr-2"></i> 复制结果
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 随机字符串生成器 -->
-      <div id="string-generator" class="mb-20">
+      <div id="string-generator" class="tool-content mb-20 hidden">
         <h2 class="section-title">随机字符串生成器</h2>
         
         <div class="tool-card mt-8">
@@ -227,7 +380,7 @@
       </div>
       
       <!-- 字符长度计算器 -->
-      <div id="length-calculator" class="mb-20">
+      <div id="length-calculator" class="tool-content mb-20 hidden">
         <h2 class="section-title">字符长度计算器</h2>
         
         <div class="tool-card mt-8">
@@ -278,7 +431,7 @@
       </div>
       
       <!-- 条形码生成器 -->
-      <div id="barcode-generator">
+      <div id="barcode-generator" class="tool-content mb-20 hidden">
         <h2 class="section-title">条形码生成器</h2>
         
         <div class="tool-card mt-8">
@@ -717,11 +870,402 @@
       showNotification('批量下载功能已触发（实际项目中会打包所有条形码为ZIP文件）');
     });
     
-    // 初始化
-    window.addEventListener('DOMContentLoaded', () => {
-      // 触发一次计算以显示初始状态
+    // 工具选项卡切换功能
+    document.addEventListener('DOMContentLoaded', () => {
+      // 选项卡切换
+      const toolTabs = document.querySelectorAll('.tool-tab');
+      const toolContents = document.querySelectorAll('.tool-content');
+
+      toolTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // 移除所有选项卡的active类
+          toolTabs.forEach(t => t.classList.remove('active', 'bg-primary', 'text-white'));
+          toolTabs.forEach(t => t.classList.add('bg-gray-200', 'text-gray-700'));
+
+          // 为当前选项卡添加active类
+          tab.classList.add('active', 'bg-primary', 'text-white');
+          tab.classList.remove('bg-gray-200', 'text-gray-700');
+
+          // 隐藏所有内容
+          toolContents.forEach(content => content.classList.add('hidden'));
+
+          // 显示当前内容
+          const target = tab.getAttribute('data-target');
+          document.getElementById(target).classList.remove('hidden');
+        });
+      });
+
+      // 证件类型选择按钮
+      const idTypeBtns = document.querySelectorAll('.id-type-btn');
+      idTypeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // 移除所有按钮的active类
+          idTypeBtns.forEach(b => b.classList.remove('bg-primary', 'text-white'));
+          idTypeBtns.forEach(b => b.classList.add('bg-gray-200', 'text-gray-700'));
+
+          // 为当前按钮添加active类
+          btn.classList.add('bg-primary', 'text-white');
+          btn.classList.remove('bg-gray-200', 'text-gray-700');
+        });
+      });
+
+      // 证件号码生成器
+      const generateIdsBtn = document.getElementById('generate-ids');
+      const copyIdsBtn = document.getElementById('copy-ids');
+      const idResults = document.getElementById('id-results');
+      const idCountInput = document.getElementById('id-count');
+
+      generateIdsBtn.addEventListener('click', () => {
+        const count = parseInt(idCountInput.value);
+        const activeTypeBtn = document.querySelector('.id-type-btn.bg-primary');
+        const idType = activeTypeBtn ? activeTypeBtn.getAttribute('data-type') : 'id';
+
+        if (isNaN(count) || count < 1 || count > 50) {
+          showNotification('请输入有效的生成数量（1-50）', false);
+          return;
+        }
+
+        const results = [];
+        for (let i = 0; i < count; i++) {
+          switch(idType) {
+            case 'id':
+              results.push(generateChineseId());
+              break;
+            case 'hk':
+              results.push(generateHK居住证());
+              break;
+            case 'tw':
+              results.push(generateTW居住证());
+              break;
+            case 'foreign':
+              results.push(generateForeignResidencePermit());
+              break;
+            default:
+              results.push(generateChineseId());
+          }
+        }
+
+        displayIds(results);
+      });
+
+      // 显示生成的证件号码
+      function displayIds(ids) {
+        idResults.innerHTML = '';
+
+        ids.forEach((item, index) => {
+          const idItem = document.createElement('div');
+          idItem.className = 'flex items-center justify-between p-3 border-b border-gray-200 last:border-0 hover:bg-gray-100 transition-colors';
+
+          const infoDiv = document.createElement('div');
+
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'block text-sm text-gray-500';
+          nameSpan.textContent = `姓名: ${item.name}`;
+
+          const idSpan = document.createElement('span');
+          idSpan.className = 'font-mono text-sm';
+          idSpan.textContent = item.id;
+
+          infoDiv.appendChild(nameSpan);
+          infoDiv.appendChild(idSpan);
+
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'text-gray-400 hover:text-primary transition-colors p-2';
+          copyBtn.innerHTML = '<i class="fa fa-copy"></i>';
+          copyBtn.title = '复制此证件号码';
+          copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(item.id)
+              .then(() => showNotification('证件号码已复制'))
+              .catch(() => showNotification('复制失败', false));
+          });
+
+          idItem.appendChild(infoDiv);
+          idItem.appendChild(copyBtn);
+          idResults.appendChild(idItem);
+        });
+
+        copyIdsBtn.disabled = false;
+      }
+
+      // 复制所有证件号码
+      copyIdsBtn.addEventListener('click', () => {
+        // 使用更精确的选择器避免选择嵌套div
+        const items = idResults.querySelectorAll('.flex.items-center.justify-between');
+        if (items.length === 0) {
+          showNotification('没有可复制的内容', false);
+          return;
+        }
+
+        const textToCopy = Array.from(items).map(item => {
+          const idSpan = item.querySelector('span:nth-child(2)');
+          return idSpan ? idSpan.textContent : '';
+        }).filter(text => text).join('\n');
+
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => showNotification('所有证件号码已复制'))
+          .catch(() => showNotification('复制失败', false));
+      });
+
+      // 手机号生成器
+      const generatePhonesBtn = document.getElementById('generate-phones');
+      const copyPhonesBtn = document.getElementById('copy-phones');
+      const phoneResults = document.getElementById('phone-results');
+      const phoneCountInput = document.getElementById('phone-count');
+      const includeCarrierCheckbox = document.getElementById('include-carrier');
+
+      generatePhonesBtn.addEventListener('click', () => {
+        const count = parseInt(phoneCountInput.value);
+        const includeCarrier = includeCarrierCheckbox.checked;
+
+        if (isNaN(count) || count < 1 || count > 50) {
+          showNotification('请输入有效的生成数量（1-50）', false);
+          return;
+        }
+
+        const results = [];
+        for (let i = 0; i < count; i++) {
+          results.push(generatePhoneNumber(includeCarrier));
+        }
+
+        displayPhones(results, includeCarrier);
+      });
+
+      // 显示生成的手机号
+      function displayPhones(phones, includeCarrier) {
+        phoneResults.innerHTML = '';
+
+        phones.forEach((item, index) => {
+          const phoneItem = document.createElement('div');
+          phoneItem.className = 'flex items-center justify-between p-3 border-b border-gray-200 last:border-0 hover:bg-gray-100 transition-colors';
+
+          const infoDiv = document.createElement('div');
+
+          const phoneSpan = document.createElement('span');
+          phoneSpan.className = 'font-mono text-sm';
+          phoneSpan.textContent = item.number;
+
+          infoDiv.appendChild(phoneSpan);
+
+          if (includeCarrier) {
+            const carrierSpan = document.createElement('span');
+            carrierSpan.className = 'block text-xs text-gray-500';
+            carrierSpan.textContent = `运营商: ${item.carrier}`;
+            infoDiv.appendChild(carrierSpan);
+          }
+
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'text-gray-400 hover:text-primary transition-colors p-2';
+          copyBtn.innerHTML = '<i class="fa fa-copy"></i>';
+          copyBtn.title = '复制此手机号';
+          copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(item.number)
+              .then(() => showNotification('手机号已复制'))
+              .catch(() => showNotification('复制失败', false));
+          });
+
+          phoneItem.appendChild(infoDiv);
+          phoneItem.appendChild(copyBtn);
+          phoneResults.appendChild(phoneItem);
+        });
+
+        copyPhonesBtn.disabled = false;
+      }
+
+      // 复制所有手机号
+      copyPhonesBtn.addEventListener('click', () => {
+        // 使用更精确的选择器避免选择嵌套div
+        const items = phoneResults.querySelectorAll('.flex.items-center.justify-between');
+        if (items.length === 0) {
+          showNotification('没有可复制的内容', false);
+          return;
+        }
+
+        const textToCopy = Array.from(items).map(item => {
+          const phoneSpan = item.querySelector('span:nth-child(1)');
+          return phoneSpan ? phoneSpan.textContent : '';
+        }).filter(text => text).join('\n');
+
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => showNotification('所有手机号已复制'))
+          .catch(() => showNotification('复制失败', false));
+      });
+
+      // JSON解析器
+      const formatJsonBtn = document.getElementById('format-json');
+      const minifyJsonBtn = document.getElementById('minify-json');
+      const copyJsonBtn = document.getElementById('copy-json');
+      const jsonInput = document.getElementById('json-input');
+      const jsonOutput = document.getElementById('json-output');
+
+      formatJsonBtn.addEventListener('click', () => {
+        const input = jsonInput.value.trim();
+
+        if (!input) {
+          showNotification('请输入JSON字符串', false);
+          return;
+        }
+
+        try {
+          const parsed = JSON.parse(input);
+          const formatted = JSON.stringify(parsed, null, 2);
+
+          // 使用innerHTML而不是textContent，确保格式正确显示
+          jsonOutput.innerHTML = `<pre class="whitespace-pre-wrap">${formatted}</pre>`;
+          minifyJsonBtn.disabled = false;
+          copyJsonBtn.disabled = false;
+          showNotification('JSON格式化成功');
+        } catch (error) {
+          jsonOutput.innerHTML = `<pre class="text-red-500">解析错误: ${error.message}</pre>`;
+          minifyJsonBtn.disabled = true;
+          copyJsonBtn.disabled = true;
+          showNotification('JSON解析失败', false);
+        }
+      });
+
+      minifyJsonBtn.addEventListener('click', () => {
+        const input = jsonInput.value.trim();
+
+        if (!input) {
+          showNotification('请输入JSON字符串', false);
+          return;
+        }
+
+        try {
+          const parsed = JSON.parse(input);
+          const minified = JSON.stringify(parsed);
+
+          // 使用innerHTML而不是textContent
+          jsonOutput.innerHTML = `<pre class="whitespace-pre-wrap">${minified}</pre>`;
+          showNotification('JSON压缩成功');
+        } catch (error) {
+          jsonOutput.innerHTML = `<pre class="text-red-500">解析错误: ${error.message}</pre>`;
+          showNotification('JSON解析失败', false);
+        }
+      });
+
+      copyJsonBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(jsonOutput.textContent)
+          .then(() => showNotification('JSON结果已复制'))
+          .catch(() => showNotification('复制失败', false));
+      });
+
+      // 初始化
       calculateTextStats();
     });
+
+    // 生成随机中文姓名
+    function generateChineseName() {
+      const familyNames = ['赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '褚', '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许', '何', '吕', '施', '张', '孔', '曹', '严', '华', '金', '魏', '陶', '姜'];
+      const givenNames = ['伟', '芳', '娜', '秀英', '敏', '静', '强', '磊', '军', '洋', '勇', '艳', '杰', '涛', '明', '超', '秀兰', '霞', '平', '刚', '玲', '芳', '强', '军', '英', '梅', '雪', '敏', '静', '丽', '燕', '玲'];
+
+      const familyName = familyNames[Math.floor(Math.random() * familyNames.length)];
+      const givenName = givenNames[Math.floor(Math.random() * givenNames.length)];
+
+      return familyName + givenName;
+    }
+
+    // 生成中国身份证号
+    function generateChineseId() {
+      // 前6位地址码（这里使用随机生成）
+      const areaCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // 中间8位出生日期（1950-2000年之间）
+      const year = Math.floor(1950 + Math.random() * 51).toString();
+      const month = Math.floor(1 + Math.random() * 12).toString().padStart(2, '0');
+      const day = Math.floor(1 + Math.random() * 28).toString().padStart(2, '0');
+      const birthDate = year + month + day;
+
+      // 后4位顺序码和校验码
+      const sequenceCode = Math.floor(100 + Math.random() * 900).toString();
+
+      // 组合前17位
+      const first17 = areaCode + birthDate + sequenceCode;
+
+      // 计算校验码
+      const weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+      const checkCodes = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'];
+
+      let sum = 0;
+      for (let i = 0; i < 17; i++) {
+        sum += parseInt(first17[i]) * weights[i];
+      }
+      const checkCode = checkCodes[sum % 11];
+
+      return { name: generateChineseName(), id: first17 + checkCode };
+    }
+
+    // 生成港澳居住证
+    function generateHK居住证() {
+      // 港澳居民居住证号码格式: H/M + 17位数字
+      const typeCode = Math.random() > 0.5 ? 'H' : 'M';
+      const randomPart = Math.floor(10000000000000000 + Math.random() * 90000000000000000).toString();
+
+      return { name: generateChineseName(), id: typeCode + randomPart };
+    }
+
+    // 生成台湾居住证
+    function generateTW居住证() {
+      // 台湾居民居住证号码格式: T + 17位数字
+      const randomPart = Math.floor(10000000000000000 + Math.random() * 90000000000000000).toString();
+
+      return { name: generateChineseName(), id: 'T' + randomPart };
+    }
+
+    // 生成外国人居留证
+    function generateForeignResidencePermit() {
+      // 外国人永久居留身份证格式: 18位，前3位为国家或地区代码，后15位为顺序码
+      const countryCode = Math.floor(100 + Math.random() * 900).toString();
+      const randomPart = Math.floor(100000000000000 + Math.random() * 900000000000000).toString();
+
+      // 随机英文姓名
+      const firstName = generateRandomString(5, true, false, false, false);
+      const lastName = generateRandomString(7, true, false, false, false);
+      const name = firstName + ' ' + lastName;
+
+      return { name: name, id: countryCode + randomPart };
+    }
+
+    // 生成随机手机号
+    function generatePhoneNumber(includeCarrier) {
+      // 手机号前三位（运营商号段）
+      const carriers = [
+        { prefixes: ['130', '131', '132', '155', '156', '185', '186', '145', '176'], name: '中国联通' },
+        { prefixes: ['134', '135', '136', '137', '138', '139', '150', '151', '152', '157', '158', '159', '182', '183', '184', '147', '178'], name: '中国移动' },
+        { prefixes: ['133', '153', '180', '181', '189', '177'], name: '中国电信' }
+      ];
+
+      // 随机选择运营商
+      const carrier = carriers[Math.floor(Math.random() * carriers.length)];
+      // 随机选择号段
+      const prefix = carrier.prefixes[Math.floor(Math.random() * carrier.prefixes.length)];
+      // 生成后8位
+      const suffix = Math.floor(10000000 + Math.random() * 90000000).toString();
+
+      const number = prefix + suffix;
+
+      if (includeCarrier) {
+        return { number: number, carrier: carrier.name };
+      } else {
+        return { number: number };
+      }
+    }
+
+    // 生成随机字符串（用于生成随机英文姓名）
+    function generateRandomString(length, useUppercase, useLowercase, useNumbers, useSymbols) {
+      let charset = '';
+      if (useUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (useLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+      if (useNumbers) charset += '0123456789';
+      if (useSymbols) charset += '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+
+      let str = '';
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        str += charset[randomIndex];
+      }
+
+      return str;
+    }
   </script>
 </body>
 </html>
