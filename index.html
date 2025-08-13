@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>软件测试工具集</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome (使用备用CDN) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 引入条形码生成库 (使用备用CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+  
+  <!-- 配置Tailwind自定义颜色和字体 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            accent: '#8B5CF6',
+            dark: '#1E293B',
+            light: '#F8FAFC'
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .tool-card {
+        @apply bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+      }
+      .btn-primary {
+        @apply bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-primary/50 focus:outline-none;
+      }
+      .btn-secondary {
+        @apply bg-secondary hover:bg-secondary/90 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-secondary/50 focus:outline-none;
+      }
+      .input-field {
+        @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 outline-none;
+      }
+      .section-title {
+        @apply text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-6 relative inline-block;
+      }
+      .section-title::after {
+        @apply content-[''] absolute w-1/2 h-1 bg-primary left-0 bottom-[-8px] rounded-full;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-inter bg-gray-50 text-dark">
+  <!-- 导航栏 -->
+  <header class="sticky top-0 z-50 bg-white shadow-md transition-all duration-300" id="navbar">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fa fa-wrench text-primary text-2xl"></i>
+        <h1 class="text-xl md:text-2xl font-bold text-primary">测试工具集</h1>
+      </div>
+      
+      <nav class="hidden md:flex items-center space-x-6">
+        <a href="#string-generator" class="font-medium hover:text-primary transition-colors">字符串生成</a>
+        <a href="#length-calculator" class="font-medium hover:text-primary transition-colors">长度计算</a>
+        <a href="#barcode-generator" class="font-medium hover:text-primary transition-colors">条形码生成</a>
+      </nav>
+      
+      <button class="md:hidden text-dark text-xl" id="menu-toggle">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+    
+    <!-- 移动端菜单 -->
+    <div class="md:hidden hidden bg-white shadow-lg absolute w-full" id="mobile-menu">
+      <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+        <a href="#string-generator" class="font-medium hover:text-primary transition-colors py-2">字符串生成</a>
+        <a href="#length-calculator" class="font-medium hover:text-primary transition-colors py-2">长度计算</a>
+        <a href="#barcode-generator" class="font-medium hover:text-primary transition-colors py-2">条形码生成</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="bg-gradient-to-br from-primary to-accent text-white py-16 md:py-24">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold mb-6 leading-tight">
+        专业软件测试工具集
+      </h2>
+      <p class="text-[clamp(1rem,2vw,1.25rem)] max-w-2xl mx-auto mb-8 opacity-90">
+        提供随机字符串生成、字符长度计算和批量条形码生成等实用功能，
+        帮助测试人员高效完成工作
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#string-generator" class="bg-white text-primary hover:bg-gray-100 font-medium py-3 px-6 rounded-lg transition-all duration-200">
+          开始使用 <i class="fa fa-arrow-right ml-2"></i>
+        </a>
+        <a href="#features" class="bg-transparent border-2 border-white hover:bg-white/10 font-medium py-3 px-6 rounded-lg transition-all duration-200">
+          了解功能
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 功能概览 -->
+  <section id="features" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="section-title mx-auto text-center">核心功能</h2>
+      
+      <div class="grid md:grid-cols-3 gap-8 mt-12">
+        <!-- 功能卡片1 -->
+        <div class="tool-card text-center">
+          <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-random text-primary text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">随机字符串生成</h3>
+          <p class="text-gray-600">
+            生成各种格式的随机字符串，支持自定义长度、字符类型和格式，满足不同测试场景需求。
+          </p>
+        </div>
+        
+        <!-- 功能卡片2 -->
+        <div class="tool-card text-center">
+          <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-arrows-h text-secondary text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">字符长度计算</h3>
+          <p class="text-gray-600">
+            快速计算输入文本的字符长度，支持各种特殊字符和多字节字符的准确计数。
+          </p>
+        </div>
+        
+        <!-- 功能卡片3 -->
+        <div class="tool-card text-center">
+          <div class="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-barcode text-accent text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">批量条形码生成</h3>
+          <p class="text-gray-600">
+            批量生成标准条形码，支持自定义内容和数量，可直接下载使用。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 工具区域 -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <!-- 随机字符串生成器 -->
+      <div id="string-generator" class="mb-20">
+        <h2 class="section-title">随机字符串生成器</h2>
+        
+        <div class="tool-card mt-8">
+          <div class="grid md:grid-cols-12 gap-8">
+            <div class="md:col-span-5">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 font-medium mb-2" for="str-length">
+                    字符串长度
+                  </label>
+                  <input type="number" id="str-length" class="input-field" min="1" max="1000" value="10">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 font-medium mb-2">
+                    字符类型
+                  </label>
+                  <div class="grid grid-cols-2 gap-3">
+                    <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                      <input type="checkbox" id="include-uppercase" class="form-checkbox text-primary h-5 w-5" checked>
+                      <span>大写字母 (A-Z)</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                      <input type="checkbox" id="include-lowercase" class="form-checkbox text-primary h-5 w-5" checked>
+                      <span>小写字母 (a-z)</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                      <input type="checkbox" id="include-numbers" class="form-checkbox text-primary h-5 w-5" checked>
+                      <span>数字 (0-9)</span>
+                    </label>
+                    <label class="flex items-center space-x-2 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                      <input type="checkbox" id="include-symbols" class="form-checkbox text-primary h-5 w-5">
+                      <span>特殊字符 (!@#$等)</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 font-medium mb-2" for="str-count">
+                    生成数量
+                  </label>
+                  <input type="number" id="str-count" class="input-field" min="1" max="100" value="5">
+                </div>
+                
+                <div>
+                  <button id="generate-strings" class="btn-primary w-full flex items-center justify-center">
+                    <i class="fa fa-refresh mr-2"></i> 生成随机字符串
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="md:col-span-7">
+              <label class="block text-gray-700 font-medium mb-2">
+                生成结果
+              </label>
+              <div class="border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto bg-gray-50 mb-4" id="string-results">
+                <div class="text-gray-500 italic text-center py-10">
+                  点击生成按钮开始创建随机字符串
+                </div>
+              </div>
+              <button id="copy-strings" class="btn-secondary w-full flex items-center justify-center">
+                <i class="fa fa-copy mr-2"></i> 复制所有结果
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 字符长度计算器 -->
+      <div id="length-calculator" class="mb-20">
+        <h2 class="section-title">字符长度计算器</h2>
+        
+        <div class="tool-card mt-8">
+          <div class="grid md:grid-cols-12 gap-8">
+            <div class="md:col-span-7">
+              <label class="block text-gray-700 font-medium mb-2" for="text-input">
+                输入文本
+              </label>
+              <textarea id="text-input" class="input-field h-40 resize-none" placeholder="请输入需要计算长度的文本..."></textarea>
+              
+              <div class="mt-4 flex gap-4">
+                <button id="calculate-length" class="btn-primary flex-1 flex items-center justify-center">
+                  <i class="fa fa-calculator mr-2"></i> 计算长度
+                </button>
+                <button id="clear-text" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-all duration-200">
+                  <i class="fa fa-eraser"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="md:col-span-5">
+              <label class="block text-gray-700 font-medium mb-2">
+                计算结果
+              </label>
+              <div class="bg-gray-50 rounded-lg p-6 h-64 flex flex-col justify-center">
+                <div class="grid grid-cols-2 gap-6 text-center">
+                  <div class="p-4 bg-white rounded-lg shadow-sm">
+                    <p class="text-gray-500 text-sm mb-1">字符总数</p>
+                    <p class="text-3xl font-bold text-primary" id="total-chars">0</p>
+                  </div>
+                  <div class="p-4 bg-white rounded-lg shadow-sm">
+                    <p class="text-gray-500 text-sm mb-1">字节数 (UTF-8)</p>
+                    <p class="text-3xl font-bold text-primary" id="byte-count">0</p>
+                  </div>
+                  <div class="p-4 bg-white rounded-lg shadow-sm">
+                    <p class="text-gray-500 text-sm mb-1">空格数</p>
+                    <p class="text-3xl font-bold text-primary" id="space-count">0</p>
+                  </div>
+                  <div class="p-4 bg-white rounded-lg shadow-sm">
+                    <p class="text-gray-500 text-sm mb-1">行数</p>
+                    <p class="text-3xl font-bold text-primary" id="line-count">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 条形码生成器 -->
+      <div id="barcode-generator">
+        <h2 class="section-title">条形码生成器</h2>
+        
+        <div class="tool-card mt-8">
+          <div class="space-y-6">
+            <div class="mb-6">
+              <label class="block text-gray-700 font-medium mb-2" for="barcode-string">
+                输入要生成条形码的字符串
+              </label>
+              <input type="text" id="barcode-string" class="input-field" placeholder="例如: ABC123456789">
+              <p class="text-sm text-gray-500 mt-1">支持CODE128格式，可包含字母、数字和部分特殊字符</p>
+            </div>
+            
+            <div class="flex justify-center">
+              <button id="generate-barcodes" class="btn-primary flex items-center">
+                <i class="fa fa-barcode mr-2"></i> 生成条形码
+              </button>
+            </div>
+            
+            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50" id="barcode-results">
+              <div class="text-gray-500 italic text-center py-10">
+                输入字符串后点击生成按钮创建条形码
+              </div>
+            </div>
+            
+            <div class="flex justify-center">
+              <button id="download-barcodes" class="btn-secondary flex items-center" disabled>
+                <i class="fa fa-download mr-2"></i> 下载所有条形码
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-dark text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center space-x-2">
+            <i class="fa fa-wrench text-primary text-2xl"></i>
+            <h2 class="text-xl font-bold">测试工具集</h2>
+          </div>
+          <p class="text-gray-400 mt-2">专业的软件测试辅助工具</p>
+        </div>
+        
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+            <i class="fa fa-github text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+            <i class="fa fa-twitter text-xl"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+            <i class="fa fa-envelope text-xl"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2023 测试工具集 - 版权所有</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 通知提示组件 -->
+  <div id="notification" class="fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center">
+    <i id="notification-icon" class="mr-2"></i>
+    <span id="notification-message"></span>
+  </div>
+
+  <script>
+    // DOM元素
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const notification = document.getElementById('notification');
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationMessage = document.getElementById('notification-message');
+    
+    // 字符串生成器元素
+    const strLengthInput = document.getElementById('str-length');
+    const includeUppercase = document.getElementById('include-uppercase');
+    const includeLowercase = document.getElementById('include-lowercase');
+    const includeNumbers = document.getElementById('include-numbers');
+    const includeSymbols = document.getElementById('include-symbols');
+    const strCountInput = document.getElementById('str-count');
+    const generateStringsBtn = document.getElementById('generate-strings');
+    const stringResults = document.getElementById('string-results');
+    const copyStringsBtn = document.getElementById('copy-strings');
+    
+    // 长度计算器元素
+    const textInput = document.getElementById('text-input');
+    const calculateLengthBtn = document.getElementById('calculate-length');
+    const clearTextBtn = document.getElementById('clear-text');
+    const totalCharsEl = document.getElementById('total-chars');
+    const byteCountEl = document.getElementById('byte-count');
+    const spaceCountEl = document.getElementById('space-count');
+    const lineCountEl = document.getElementById('line-count');
+    
+    // 条形码生成器元素
+    const barcodePrefix = document.getElementById('barcode-prefix');
+    const barcodeStart = document.getElementById('barcode-start');
+    const barcodeCount = document.getElementById('barcode-count');
+    const generateBarcodesBtn = document.getElementById('generate-barcodes');
+    const barcodeResults = document.getElementById('barcode-results');
+    const downloadBarcodesBtn = document.getElementById('download-barcodes');
+    
+    // 导航栏滚动效果
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('py-2', 'shadow-lg');
+        navbar.classList.remove('py-3', 'shadow-md');
+      } else {
+        navbar.classList.add('py-3', 'shadow-md');
+        navbar.classList.remove('py-2', 'shadow-lg');
+      }
+    });
+    
+    // 移动端菜单切换
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      const icon = menuToggle.querySelector('i');
+      if (icon.classList.contains('fa-bars')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        // 关闭移动菜单（如果打开）
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          const icon = menuToggle.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 显示通知
+    function showNotification(message, isSuccess = true) {
+      notificationMessage.textContent = message;
+      
+      if (isSuccess) {
+        notification.classList.add('bg-green-500');
+        notification.classList.remove('bg-red-500');
+        notificationIcon.className = 'fa fa-check-circle mr-2';
+      } else {
+        notification.classList.add('bg-red-500');
+        notification.classList.remove('bg-green-500');
+        notificationIcon.className = 'fa fa-exclamation-circle mr-2';
+      }
+      
+      notification.classList.remove('translate-y-20', 'opacity-0');
+      notification.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        notification.classList.remove('translate-y-0', 'opacity-100');
+        notification.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+    
+    // 随机字符串生成器
+    generateStringsBtn.addEventListener('click', () => {
+      const length = parseInt(strLengthInput.value);
+      const count = parseInt(strCountInput.value);
+      
+      // 验证输入
+      if (isNaN(length) || length < 1 || length > 1000) {
+        showNotification('请输入有效的字符串长度（1-1000）', false);
+        return;
+      }
+      
+      if (isNaN(count) || count < 1 || count > 100) {
+        showNotification('请输入有效的生成数量（1-100）', false);
+        return;
+      }
+      
+      // 检查至少选择了一种字符类型
+      if (!includeUppercase.checked && !includeLowercase.checked && 
+          !includeNumbers.checked && !includeSymbols.checked) {
+        showNotification('请至少选择一种字符类型', false);
+        return;
+      }
+      
+      // 生成字符集
+      let charset = '';
+      if (includeUppercase.checked) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (includeLowercase.checked) charset += 'abcdefghijklmnopqrstuvwxyz';
+      if (includeNumbers.checked) charset += '0123456789';
+      if (includeSymbols.checked) charset += '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+      
+      // 生成随机字符串
+      const results = [];
+      for (let i = 0; i < count; i++) {
+        let str = '';
+        for (let j = 0; j < length; j++) {
+          const randomIndex = Math.floor(Math.random() * charset.length);
+          str += charset[randomIndex];
+        }
+        results.push(str);
+      }
+      
+      // 显示结果
+      displayStrings(results);
+    });
+    
+    // 显示生成的字符串
+    function displayStrings(strings) {
+      stringResults.innerHTML = '';
+      
+      strings.forEach((str, index) => {
+        const stringItem = document.createElement('div');
+        stringItem.className = 'flex items-center p-2 border-b border-gray-200 last:border-0 hover:bg-gray-100 transition-colors';
+        
+        const indexSpan = document.createElement('span');
+        indexSpan.className = 'w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-3 flex-shrink-0';
+        indexSpan.textContent = index + 1;
+        
+        const stringSpan = document.createElement('span');
+        stringSpan.className = 'flex-grow break-all font-mono text-sm';
+        stringSpan.textContent = str;
+        
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'text-gray-400 hover:text-primary transition-colors p-2';
+        copyBtn.innerHTML = '<i class="fa fa-copy"></i>';
+        copyBtn.title = '复制此字符串';
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(str)
+            .then(() => showNotification('字符串已复制'))
+            .catch(() => showNotification('复制失败', false));
+        });
+        
+        stringItem.appendChild(indexSpan);
+        stringItem.appendChild(stringSpan);
+        stringItem.appendChild(copyBtn);
+        stringResults.appendChild(stringItem);
+      });
+    }
+    
+    // 复制所有字符串
+    copyStringsBtn.addEventListener('click', () => {
+      const items = stringResults.querySelectorAll('span:nth-child(2)');
+      if (items.length === 0) {
+        showNotification('没有可复制的内容', false);
+        return;
+      }
+      
+      const textToCopy = Array.from(items).map(item => item.textContent).join('\n');
+      
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => showNotification('所有字符串已复制'))
+        .catch(() => showNotification('复制失败', false));
+    });
+    
+    // 字符长度计算
+    calculateLengthBtn.addEventListener('click', calculateTextStats);
+    
+    // 实时计算（输入时）
+    textInput.addEventListener('input', calculateTextStats);
+    
+    // 清空文本
+    clearTextBtn.addEventListener('click', () => {
+      textInput.value = '';
+      calculateTextStats();
+    });
+    
+    // 计算文本统计信息
+    function calculateTextStats() {
+      const text = textInput.value;
+      
+      // 字符总数
+      const totalChars = text.length;
+      
+      // 字节数 (UTF-8)
+      const byteCount = new TextEncoder().encode(text).length;
+      
+      // 空格数
+      const spaceCount = (text.match(/\s/g) || []).length;
+      
+      // 行数
+      const lineCount = text === '' ? 0 : text.split('\n').length;
+      
+      // 更新显示，添加数字变化动画
+      animateNumberChange(totalCharsEl, totalChars);
+      animateNumberChange(byteCountEl, byteCount);
+      animateNumberChange(spaceCountEl, spaceCount);
+      animateNumberChange(lineCountEl, lineCount);
+    }
+    
+    // 数字变化动画
+    function animateNumberChange(element, targetValue) {
+      const startValue = parseInt(element.textContent);
+      const duration = 300; // 动画持续时间（毫秒）
+      const startTime = performance.now();
+      
+      function updateNumber(currentTime) {
+        const elapsedTime = currentTime - startTime;
+        if (elapsedTime < duration) {
+          const progress = elapsedTime / duration;
+          // 使用easeOutQuad缓动函数使动画更自然
+          const easeProgress = 1 - (1 - progress) * (1 - progress);
+          const currentValue = Math.floor(startValue + (targetValue - startValue) * easeProgress);
+          element.textContent = currentValue;
+          requestAnimationFrame(updateNumber);
+        } else {
+          element.textContent = targetValue;
+        }
+      }
+      
+      requestAnimationFrame(updateNumber);
+    }
+    
+    // 初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      // 触发一次计算以显示初始状态
+      calculateTextStats();
+      
+      // 获取按钮元素
+      const generateBarcodesBtn = document.getElementById('generate-barcodes');
+      const downloadBarcodesBtn = document.getElementById('download-barcodes');
+      const barcodeResults = document.getElementById('barcode-results');
+      
+      // 条形码生成
+      generateBarcodesBtn.addEventListener('click', () => {
+        const inputString = document.getElementById('barcode-string').value.trim();
+        
+        if (!inputString) {
+          showNotification('请输入要生成条形码的字符串', false);
+          return;
+        }
+        
+        barcodeResults.innerHTML = '';
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-1 gap-4';
+        
+        const code = inputString;
+        const barcodeContainer = document.createElement('div');
+        barcodeContainer.className = 'bg-white p-6 rounded-lg shadow-sm flex flex-col items-center';
+        
+        // 创建Canvas元素
+        const canvas = document.createElement('canvas');
+        canvas.className = 'mx-auto mb-4';
+        
+        // 创建文本标签
+        const codeText = document.createElement('p');
+        codeText.className = 'text-lg font-medium text-gray-700';
+        codeText.textContent = code;
+        
+        barcodeContainer.appendChild(canvas);
+        barcodeContainer.appendChild(codeText);
+        grid.appendChild(barcodeContainer);
+        
+        // 确保JsBarcode已加载
+        if (typeof JsBarcode !== 'undefined') {
+          // 使用JsBarcode生成条形码
+          JsBarcode(canvas, code, {
+            format: "CODE128",
+            width: 2,
+            height: 100,
+            displayValue: false
+          });
+          
+          barcodeResults.appendChild(grid);
+          showNotification('条形码已生成');
+          downloadBarcodesBtn.disabled = false;
+        } else {
+          showNotification('条形码库加载失败，请刷新页面重试', false);
+        }
+      });
+    });
+    
+    // 生成并显示条形码
+    function generateBarcodes(prefix, start, count) {
+      barcodeResults.innerHTML = '';
+      
+      // 创建网格容器
+      const grid = document.createElement('div');
+      grid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6';
+      
+      for (let i = 0; i < count; i++) {
+        const code = prefix + (start + i);
+        
+        // 创建条形码容器
+        const barcodeContainer = document.createElement('div');
+        barcodeContainer.className = 'bg-white p-4 rounded-lg shadow-sm text-center';
+        
+        // 创建canvas元素用于绘制条形码
+        const canvas = document.createElement('canvas');
+        canvas.id = `barcode-${i}`;
+        canvas.className = 'mx-auto mb-2';
+        
+        // 创建文本标签
+        const codeText = document.createElement('p');
+        codeText.className = 'text-sm font-medium text-gray-700 truncate';
+        codeText.textContent = code;
+        
+        barcodeContainer.appendChild(canvas);
+        barcodeContainer.appendChild(codeText);
+        grid.appendChild(barcodeContainer);
+        
+        // 使用JsBarcode生成条形码
+        JsBarcode(canvas, code, {
+          format: "CODE128",
+          width: 2,
+          height: 60,
+          displayValue: false
+        });
+      }
+      
+      barcodeResults.appendChild(grid);
+      showNotification(`已生成 ${count} 个条形码`);
+    }
+    
+    // 下载条形码（模拟，实际项目中需要使用Canvas或SVG转图片库）
+    downloadBarcodesBtn.addEventListener('click', () => {
+      showNotification('批量下载功能已触发（实际项目中会打包所有条形码为ZIP文件）');
+    });
+    
+    // 初始化
+    window.addEventListener('DOMContentLoaded', () => {
+      // 触发一次计算以显示初始状态
+      calculateTextStats();
+    });
+  </script>
+</body>
+</html>
