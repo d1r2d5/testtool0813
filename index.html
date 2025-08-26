@@ -68,73 +68,168 @@
   </style>
 </head>
 
-<body class="font-inter bg-gray-50 text-dark">
-  <!-- 导航栏 -->
-  <header class="sticky top-0 z-50 bg-white shadow-md transition-all duration-300" id="navbar">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <i class="fa fa-wrench text-primary text-2xl"></i>
-        <h1 class="text-xl md:text-2xl font-bold text-primary">测试工具集</h1>
-      </div>
-      
-      <nav class="hidden md:flex items-center space-x-6">
-        <!-- 导航按钮已移除 -->
-      </nav>
-      
-      <button class="md:hidden text-dark text-xl" id="menu-toggle">
-        <i class="fa fa-bars"></i>
-      </button>
+<body class="font-inter text-dark">
+  <!-- 海滩阳光动态背景 -->
+  <div class="fixed inset-0 z-[-1]" id="starry-background">
+    <div class="wave-container">
+      <div class="wave"></div>
+      <div class="wave"></div>
     </div>
-    
-    <!-- 移动端菜单 -->
-    <div class="md:hidden hidden bg-white shadow-lg absolute w-full" id="mobile-menu">
-      <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
-        <a href="#string-generator" class="font-medium hover:text-primary transition-colors py-2">字符串生成</a>
-        <a href="#length-calculator" class="font-medium hover:text-primary transition-colors py-2">长度计算</a>
-        <a href="#barcode-generator" class="font-medium hover:text-primary transition-colors py-2">条形码生成</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- 英雄区域 -->
-  <section class="relative h-[50vh] md:h-[60vh] overflow-hidden flex items-center justify-center">
-    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 opacity-80"></div>
-    <!-- 抽象几何图形装饰 -->
-    <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute top-[10%] left-[15%] w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-      <div class="absolute top-[20%] right-[10%] w-72 h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
-      <div class="absolute bottom-[15%] left-[20%] w-60 h-60 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
-    </div>
-    <div class="container mx-auto px-4 text-center relative z-10">
-      <i class="fa fa-wrench text-white text-6xl md:text-8xl mb-6"></i>
-      <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white mb-2">测试工具集</h2>
-    </div>
+    <div class="cloud"></div>
+    <div class="cloud" style="top: 150px; left: 300px; width: 100px; height: 40px; animation: cloudMove 45s linear infinite;"></div>
+    <div class="cloud" style="top: 80px; left: 600px; width: 120px; height: 50px; animation: cloudMove 60s linear infinite;"></div>
+  </div>
+  
+  <!-- 工具区域 -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12 text-white">软件测试实用工具集</h2>
     <style>
+      /* 海滩阳光动态背景 */
+      #starry-background {
+        position: fixed;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #FFD700 70%, #FFD700 75%, #F4A460 75%, #F4A460 100%);
+      }
+      
+      /* 太阳 */
+      #starry-background::before {
+        content: '';
+        position: absolute;
+        top: 50px;
+        right: 100px;
+        width: 80px;
+        height: 80px;
+        background: radial-gradient(circle, #FFD700, #FFA500);
+        border-radius: 50%;
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 165, 0, 0.5);
+        animation: sunPulse 4s infinite alternate;
+      }
+      
+      /* 沙滩 */
+      #starry-background::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 25%;
+        background: linear-gradient(to top, #DEB887, #F4A460);
+      }
+      
+      /* 海浪容器 */
+      .wave-container {
+        position: absolute;
+        bottom: 25%;
+        left: 0;
+        right: 0;
+        height: 15%;
+        overflow: hidden;
+      }
+      
+      /* 海浪 */
+      .wave {
+        position: absolute;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(to bottom, transparent, #1E90FF);
+        border-radius: 50% 50% 0 0;
+        animation: wave 10s linear infinite;
+      }
+      
+      .wave:nth-child(2) {
+        bottom: 10px;
+        height: 80%;
+        background: linear-gradient(to bottom, transparent, #87CEEB);
+        animation: wave 12s linear infinite reverse;
+        opacity: 0.8;
+      }
+      
       /* 动画效果 */
-      @keyframes blob {
-        0% { transform: translate(0px, 0px) scale(1); }
-        33% { transform: translate(30px, -50px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
-        100% { transform: translate(0px, 0px) scale(1); }
+      @keyframes sunPulse {
+        from { transform: scale(1); }
+        to { transform: scale(1.1); }
       }
-      .animate-blob {
-        animation: blob 7s infinite;
+      
+      @keyframes wave {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
       }
-      .animation-delay-2000 {
-        animation-delay: 2s;
+      
+      /* 云朵 */
+      .cloud {
+        position: absolute;
+        top: 100px;
+        width: 150px;
+        height: 60px;
+        background: white;
+        border-radius: 30px;
+        opacity: 0.8;
+        animation: cloudMove 30s linear infinite;
       }
-      .animation-delay-4000 {
-        animation-delay: 4s;
+      
+      .cloud:before,
+      .cloud:after {
+        content: '';
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+      }
+      
+      .cloud:before {
+        width: 80px;
+        height: 80px;
+        top: -40px;
+        left: 30px;
+      }
+      
+      .cloud:after {
+        width: 60px;
+        height: 60px;
+        top: -20px;
+        right: 30px;
+      }
+      
+      @keyframes cloudMove {
+        from { transform: translateX(-200px); }
+        to { transform: translateX(100vw); }
+      }
+      
+      /* 模态框样式 */
+      .preview-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+      }
+      
+      .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 90%;
+        width: 400px;
+        text-align: center;
+      }
+      
+      .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
       }
     </style>
-  </section>
-
-  <!-- 功能概览已移除 -->
-
-  <!-- 工具区域 -->
-  <section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-12">实用工具集</h2>
       <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
         我们提供多种实用工具，帮助您更高效地完成工作和学习任务。所有工具完全免费，无需安装，即开即用。
       </p>
@@ -179,11 +274,17 @@
                     <button class="id-type-btn bg-primary text-white py-2 px-4 rounded-lg" data-type="id">
                       身份证
                     </button>
-                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="hk">
+                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="hk-residence">
                       港澳居住证
                     </button>
-                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="tw">
+                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="tw-residence">
                       台湾居住证
+                    </button>
+                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="hk-pass">
+                      港澳通行证
+                    </button>
+                    <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="tw-pass">
+                      台湾通行证
                     </button>
                     <button class="id-type-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg" data-type="foreign">
                       外国人居留证
@@ -351,7 +452,7 @@
                   <label class="block text-gray-700 font-medium mb-2" for="str-count">
                     生成数量
                   </label>
-                  <input type="number" id="str-count" class="input-field" min="1" max="100" value="5">
+                  <input type="number" id="str-count" class="input-field" min="1" max="100" value="1">
                 </div>
                 
                 <div>
@@ -438,10 +539,10 @@
           <div class="space-y-6">
             <div class="mb-6">
               <label class="block text-gray-700 font-medium mb-2" for="barcode-string">
-                输入要生成条形码的字符串
+                输入要生成条形码的字符串（一行一个）
               </label>
-              <input type="text" id="barcode-string" class="input-field" placeholder="例如: ABC123456789">
-              <p class="text-sm text-gray-500 mt-1">支持CODE128格式，可包含字母、数字和部分特殊字符</p>
+              <textarea id="barcode-string" class="input-field h-32" placeholder="例如: ABC123456789\nDEF987654321"></textarea>
+              <p class="text-sm text-gray-500 mt-1">支持CODE128格式，可包含字母、数字和部分特殊字符，每行一个条形码</p>
             </div>
             
             <div class="flex justify-center">
@@ -506,12 +607,40 @@
 
   <script>
     // DOM元素
-    const navbar = document.getElementById('navbar');
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
     const notification = document.getElementById('notification');
     const notificationIcon = document.getElementById('notification-icon');
     const notificationMessage = document.getElementById('notification-message');
+    const starryBackground = document.getElementById('starry-background');
+    
+    // 创建流星效果
+    function createMeteors() {
+      const meteorCount = 15; // 流星数量
+      
+      for (let i = 0; i < meteorCount; i++) {
+        const meteor = document.createElement('div');
+        meteor.className = 'meteor';
+        
+        // 随机位置和大小
+        const left = Math.random() * 100;
+        const top = -20; // 从顶部外开始
+        const height = 30 + Math.random() * 70;
+        const delay = Math.random() * 10;
+        const duration = 3 + Math.random() * 2;
+        const scale = 0.5 + Math.random() * 1.5;
+        
+        meteor.style.left = `${left}%`;
+        meteor.style.top = `${top}px`;
+        meteor.style.height = `${height}px`;
+        meteor.style.animationDelay = `${delay}s`;
+        meteor.style.animationDuration = `${duration}s`;
+        meteor.style.transform = `scale(${scale}) rotate(-45deg)`;
+        
+        starryBackground.appendChild(meteor);
+      }
+    }
+    
+    // 初始化流星
+    createMeteors();
     
     // 字符串生成器元素
     const strLengthInput = document.getElementById('str-length');
@@ -541,54 +670,7 @@
     const barcodeResults = document.getElementById('barcode-results');
     const downloadBarcodesBtn = document.getElementById('download-barcodes');
     
-    // 导航栏滚动效果
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('py-2', 'shadow-lg');
-        navbar.classList.remove('py-3', 'shadow-md');
-      } else {
-        navbar.classList.add('py-3', 'shadow-md');
-        navbar.classList.remove('py-2', 'shadow-lg');
-      }
-    });
-    
-    // 移动端菜单切换
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      const icon = menuToggle.querySelector('i');
-      if (icon.classList.contains('fa-bars')) {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-      } else {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-      }
-    });
-    
-    // 平滑滚动
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        
-        // 关闭移动菜单（如果打开）
-        if (!mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.add('hidden');
-          const icon = menuToggle.querySelector('i');
-          icon.classList.remove('fa-times');
-          icon.classList.add('fa-bars');
-        }
-        
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-          window.scrollTo({
-            top: targetElement.offsetTop - 80,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
+
     
     // 显示通知
     function showNotification(message, isSuccess = true) {
@@ -776,46 +858,106 @@
       
       // 条形码生成
       generateBarcodesBtn.addEventListener('click', () => {
-        const inputString = document.getElementById('barcode-string').value.trim();
+        const inputText = document.getElementById('barcode-string').value.trim();
         
-        if (!inputString) {
+        if (!inputText) {
           showNotification('请输入要生成条形码的字符串', false);
+          return;
+        }
+        
+        // 分割多行输入
+        const codes = inputText.split('\n')
+          .map(line => line.trim())
+          .filter(line => line.length > 0);
+        
+        if (codes.length === 0) {
+          showNotification('请输入有效的条形码字符串', false);
           return;
         }
         
         barcodeResults.innerHTML = '';
         const grid = document.createElement('div');
-        grid.className = 'grid grid-cols-1 gap-4';
-        
-        const code = inputString;
-        const barcodeContainer = document.createElement('div');
-        barcodeContainer.className = 'bg-white p-6 rounded-lg shadow-sm flex flex-col items-center';
-        
-        // 创建Canvas元素
-        const canvas = document.createElement('canvas');
-        canvas.className = 'mx-auto mb-4';
-        
-        // 创建文本标签
-        const codeText = document.createElement('p');
-        codeText.className = 'text-lg font-medium text-gray-700';
-        codeText.textContent = code;
-        
-        barcodeContainer.appendChild(canvas);
-        barcodeContainer.appendChild(codeText);
-        grid.appendChild(barcodeContainer);
+        grid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8';
         
         // 确保JsBarcode已加载
         if (typeof JsBarcode !== 'undefined') {
-          // 使用JsBarcode生成条形码
-          JsBarcode(canvas, code, {
-            format: "CODE128",
-            width: 2,
-            height: 100,
-            displayValue: false
+          // 为每个代码生成条形码
+          codes.forEach((code, index) => {
+            const barcodeContainer = document.createElement('div');
+            barcodeContainer.className = 'bg-white p-6 rounded-lg shadow-sm flex flex-col items-center';
+            
+            // 创建Canvas元素
+            const canvas = document.createElement('canvas');
+            canvas.id = `barcode-${index}`;
+            canvas.className = 'mx-auto mb-4';
+            
+            // 创建文本标签
+            const codeText = document.createElement('p');
+            codeText.className = 'text-sm font-medium text-gray-700 text-center break-words max-w-full';
+            codeText.textContent = code;
+            
+            // 添加点击预览功能
+            barcodeContainer.style.cursor = 'pointer';
+            barcodeContainer.addEventListener('click', () => {
+              const modal = document.createElement('div');
+              modal.className = 'preview-modal';
+              modal.innerHTML = `
+                <div class="modal-content">
+                  <button class="modal-close">&times;</button>
+                  <h3 class="text-xl font-bold mb-4">条形码预览</h3>
+                  <div class="mb-4" style="max-width: 100%;"><canvas id="preview-barcode" style="transform: scale(2); transform-origin: center;"></canvas></div>
+                  <p class="text-gray-700 font-medium">${code}</p>
+                </div>
+              `;
+              
+              // 重新绘制放大的条形码
+              const previewCanvas = modal.querySelector('#preview-barcode');
+              JsBarcode(previewCanvas, code, {
+                format: "CODE128",
+                width: 2,
+                height: 160, // 放大高度
+                displayValue: false
+              });
+              
+              // 关闭按钮
+              const closeBtn = modal.querySelector('.modal-close');
+              closeBtn.addEventListener('click', () => {
+                modal.remove();
+              });
+              
+              // 点击背景关闭
+              modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                  modal.remove();
+                }
+              });
+              
+              // ESC键关闭
+              document.addEventListener('keydown', function handleEsc(e) {
+                if (e.key === 'Escape') {
+                  modal.remove();
+                  document.removeEventListener('keydown', handleEsc);
+                }
+              });
+              
+              document.body.appendChild(modal);
+            });
+
+            barcodeContainer.appendChild(canvas);
+            barcodeContainer.appendChild(codeText);
+            grid.appendChild(barcodeContainer);
+            
+            // 使用JsBarcode生成条形码
+            JsBarcode(canvas, code, {
+              format: "CODE128",
+              width: 2,
+              height: 80,
+              displayValue: false
+            });
           });
           
           barcodeResults.appendChild(grid);
-          showNotification('条形码已生成');
+          showNotification(`已生成 ${codes.length} 个条形码`);
           downloadBarcodesBtn.disabled = false;
         } else {
           showNotification('条形码库加载失败，请刷新页面重试', false);
@@ -829,7 +971,7 @@
       
       // 创建网格容器
       const grid = document.createElement('div');
-      grid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6';
+        grid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8';
       
       for (let i = 0; i < count; i++) {
         const code = prefix + (start + i);
@@ -848,6 +990,53 @@
         codeText.className = 'text-sm font-medium text-gray-700 truncate';
         codeText.textContent = code;
         
+        // 添加点击预览功能
+        barcodeContainer.style.cursor = 'pointer';
+        barcodeContainer.addEventListener('click', () => {
+          const modal = document.createElement('div');
+          modal.className = 'preview-modal';
+          modal.innerHTML = `
+            <div class="modal-content">
+              <button class="modal-close">&times;</button>
+              <h3 class="text-xl font-bold mb-4">条形码预览</h3>
+              <div class="mb-4" style="max-width: 100%;"><canvas id="preview-barcode" style="transform: scale(2); transform-origin: center;"></canvas></div>
+              <p class="text-gray-700 font-medium">${code}</p>
+            </div>
+          `;
+          
+          // 重新绘制放大的条形码
+          const previewCanvas = modal.querySelector('#preview-barcode');
+          JsBarcode(previewCanvas, code, {
+            format: "CODE128",
+            width: 2,
+            height: 120, // 放大高度
+            displayValue: false
+          });
+          
+          // 关闭按钮
+          const closeBtn = modal.querySelector('.modal-close');
+          closeBtn.addEventListener('click', () => {
+            modal.remove();
+          });
+          
+          // 点击背景关闭
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              modal.remove();
+            }
+          });
+          
+          // ESC键关闭
+          document.addEventListener('keydown', function handleEsc(e) {
+            if (e.key === 'Escape') {
+              modal.remove();
+              document.removeEventListener('keydown', handleEsc);
+            }
+          });
+          
+          document.body.appendChild(modal);
+        });
+
         barcodeContainer.appendChild(canvas);
         barcodeContainer.appendChild(codeText);
         grid.appendChild(barcodeContainer);
@@ -931,11 +1120,17 @@
             case 'id':
               results.push(generateChineseId());
               break;
-            case 'hk':
+            case 'hk-residence':
               results.push(generateHK居住证());
               break;
-            case 'tw':
+            case 'tw-residence':
               results.push(generateTW居住证());
+              break;
+            case 'hk-pass':
+              results.push(generateHK通行证());
+              break;
+            case 'tw-pass':
+              results.push(generateTW通行证());
               break;
             case 'foreign':
               results.push(generateForeignResidencePermit());
@@ -1196,19 +1391,87 @@
 
     // 生成港澳居住证
     function generateHK居住证() {
-      // 港澳居民居住证号码格式: H/M + 17位数字
-      const typeCode = Math.random() > 0.5 ? 'H' : 'M';
-      const randomPart = Math.floor(10000000000000000 + Math.random() * 90000000000000000).toString();
+      // 第1位 = 8，第2位 = 1（香港），第3-6位 = 0000
+      const prefix = '810000';
 
-      return { name: generateChineseName(), id: typeCode + randomPart };
+      // 生成出生日期（第7-14位）: 19或20开头，月(01-12)，日(01-31)
+      const yearPrefix = Math.random() > 0.5 ? '19' : '20';
+      const yearSuffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+      const month = Math.floor(1 + Math.random() * 12).toString().padStart(2, '0');
+      const day = Math.floor(1 + Math.random() * 28).toString().padStart(2, '0');
+      const birthDate = yearPrefix + yearSuffix + month + day;
+
+      // 第15-17位: 顺序码，第17位奇数为男，偶数为女
+      const sequence = Math.floor(100 + Math.random() * 900).toString();
+      const genderDigit = Math.random() > 0.5 ? Math.floor(Math.random() * 5) * 2 + 1 : Math.floor(Math.random() * 5) * 2;
+      const sequenceWithGender = sequence.substring(0, 2) + genderDigit;
+
+      // 第18位: 校验码（简单生成）
+      const checkCode = Math.floor(Math.random() * 10).toString();
+
+      const id = prefix + birthDate + sequenceWithGender + checkCode;
+
+      return { name: generateChineseName(), id: id };
     }
 
     // 生成台湾居住证
     function generateTW居住证() {
-      // 台湾居民居住证号码格式: T + 17位数字
-      const randomPart = Math.floor(10000000000000000 + Math.random() * 90000000000000000).toString();
+      // 第1位 = 8，第2位 = 3（台湾），第3-6位 = 0000
+      const prefix = '830000';
 
-      return { name: generateChineseName(), id: 'T' + randomPart };
+      // 生成出生日期（第7-14位）: 19或20开头，月(01-12)，日(01-31)
+      const yearPrefix = Math.random() > 0.5 ? '19' : '20';
+      const yearSuffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+      const month = Math.floor(1 + Math.random() * 12).toString().padStart(2, '0');
+      const day = Math.floor(1 + Math.random() * 28).toString().padStart(2, '0');
+      const birthDate = yearPrefix + yearSuffix + month + day;
+
+      // 第15-17位: 顺序码，第17位奇数为男，偶数为女
+      const sequence = Math.floor(100 + Math.random() * 900).toString();
+      const genderDigit = Math.random() > 0.5 ? Math.floor(Math.random() * 5) * 2 + 1 : Math.floor(Math.random() * 5) * 2;
+      const sequenceWithGender = sequence.substring(0, 2) + genderDigit;
+
+      // 第18位: 校验码（简单生成）
+      const checkCode = Math.floor(Math.random() * 10).toString();
+
+      const id = prefix + birthDate + sequenceWithGender + checkCode;
+
+      return { name: generateChineseName(), id: id };
+    }
+
+    // 生成港澳通行证
+    function generateHK通行证() {
+      // 首字母为H或M
+      const prefix = Math.random() > 0.5 ? 'H' : 'M';
+
+      // 生成8位数字
+      let randomPart;
+      do {
+        randomPart = Math.floor(10000000 + Math.random() * 90000000).toString();
+      } while (isAllSameCharacters(prefix + randomPart));
+
+      return { name: generateChineseName(), id: prefix + randomPart };
+    }
+
+    // 生成台湾通行证
+    function generateTW通行证() {
+      // 8位数字
+      let randomPart;
+      do {
+        randomPart = Math.floor(10000000 + Math.random() * 90000000).toString();
+      } while (isAllSameCharacters(randomPart));
+
+      return { name: generateChineseName(), id: randomPart };
+    }
+
+    // 检查是否所有字符相同
+    function isAllSameCharacters(str) {
+      if (str.length <= 1) return false;
+      const firstChar = str[0];
+      for (let i = 1; i < str.length; i++) {
+        if (str[i] !== firstChar) return false;
+      }
+      return true;
     }
 
     // 生成外国人居留证
