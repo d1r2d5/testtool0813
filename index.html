@@ -208,7 +208,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 50;
+        z-index: 1000;
       }
       
       .modal-content {
@@ -216,8 +216,10 @@
         padding: 20px;
         border-radius: 8px;
         max-width: 90%;
-        width: 400px;
+        width: 500px;
         text-align: center;
+        position: relative;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       }
       
       .modal-close {
@@ -226,7 +228,73 @@
         right: 10px;
         background: none;
         border: none;
-        font-size: 20px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+        z-index: 10;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s;
+      }
+      
+      .modal-close:hover {
+        background-color: #f0f0f0;
+        color: #333;
+      }
+      
+      /* 预览容器样式 */
+      .barcode-preview-container {
+        margin: 20px 0;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      /* 大小调节滑块 */
+      .size-control {
+        margin: 15px 0;
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .size-control label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #333;
+      }
+      
+      .size-control input {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: #ddd;
+        outline: none;
+        -webkit-appearance: none;
+      }
+      
+      .size-control input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+      }
+      
+      .size-control input::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
         cursor: pointer;
       }
     </style>
@@ -897,51 +965,83 @@
             codeText.textContent = code;
             
             // 添加点击预览功能
-            barcodeContainer.style.cursor = 'pointer';
-            barcodeContainer.addEventListener('click', () => {
-              const modal = document.createElement('div');
-              modal.className = 'preview-modal';
-              modal.innerHTML = `
-                <div class="modal-content">
-                  <button class="modal-close">&times;</button>
-                  <h3 class="text-xl font-bold mb-4">条形码预览</h3>
-                  <div class="mb-4" style="max-width: 100%;"><canvas id="preview-barcode" style="transform: scale(2); transform-origin: center;"></canvas></div>
-                  <p class="text-gray-700 font-medium">${code}</p>
-                </div>
-              `;
-              
-              // 重新绘制放大的条形码
-              const previewCanvas = modal.querySelector('#preview-barcode');
-              JsBarcode(previewCanvas, code, {
-                format: "CODE128",
-                width: 2,
-                height: 160, // 放大高度
-                displayValue: false
-              });
-              
-              // 关闭按钮
-              const closeBtn = modal.querySelector('.modal-close');
-              closeBtn.addEventListener('click', () => {
-                modal.remove();
-              });
-              
-              // 点击背景关闭
-              modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                  modal.remove();
+              barcodeContainer.style.cursor = 'pointer';
+              barcodeContainer.addEventListener('click', () => {
+                const modal = document.createElement('div');
+                modal.className = 'preview-modal';
+                modal.innerHTML = `
+                  <div class="modal-content">
+                    <button class="modal-close">&times;</button>
+                    <h3 class="text-xl font-bold mb-4">条形码预览</h3>
+                    <div class="barcode-preview-container">
+                      <canvas id="preview-barcode"></canvas>
+                      <div class="size-control">
+                        <label for="size-slider">调整大小: <span id="size-value">200</span>%</label>
+                        <input type="range" id="size-slider" min="50" max="300" value="200">
+                      </div>
+                    </div>
+                    <p class="text-gray-700 font-medium">${code}</p>
+                  </div>
+                `;
+                
+                // 获取元素
+                const previewCanvas = modal.querySelector('#preview-barcode');
+                const sizeSlider = modal.querySelector('#size-slider');
+                const sizeValue = modal.querySelector('#size-value');
+                
+                // 初始绘制条形码
+                let currentScale = 2.0; // 初始200%缩放
+                updateBarcodeSize(currentScale);
+                
+                // 更新条形码大小的函数
+                function updateBarcodeSize(scale) {
+                  // 清除Canvas并重新绘制
+                  const ctx = previewCanvas.getContext('2d');
+                  ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+                  
+                  // 设置缩放
+                  previewCanvas.style.transform = `scale(${scale})`;
+                  previewCanvas.style.transformOrigin = 'center';
+                  
+                  // 重新生成条形码
+                  JsBarcode(previewCanvas, code, {
+                    format: "CODE128",
+                    width: 2,
+                    height: 160,
+                    displayValue: false
+                  });
                 }
-              });
-              
-              // ESC键关闭
-              document.addEventListener('keydown', function handleEsc(e) {
-                if (e.key === 'Escape') {
+                
+                // 监听滑块变化
+                sizeSlider.addEventListener('input', () => {
+                  const scale = parseInt(sizeSlider.value) / 100;
+                  sizeValue.textContent = sizeSlider.value;
+                  updateBarcodeSize(scale);
+                });
+                
+                // 关闭按钮
+                const closeBtn = modal.querySelector('.modal-close');
+                closeBtn.addEventListener('click', () => {
                   modal.remove();
-                  document.removeEventListener('keydown', handleEsc);
-                }
+                });
+                
+                // 点击背景关闭
+                modal.addEventListener('click', (e) => {
+                  if (e.target === modal) {
+                    modal.remove();
+                  }
+                });
+                
+                // ESC键关闭
+                document.addEventListener('keydown', function handleEsc(e) {
+                  if (e.key === 'Escape') {
+                    modal.remove();
+                    document.removeEventListener('keydown', handleEsc);
+                  }
+                });
+                
+                document.body.appendChild(modal);
               });
-              
-              document.body.appendChild(modal);
-            });
 
             barcodeContainer.appendChild(canvas);
             barcodeContainer.appendChild(codeText);
@@ -991,51 +1091,83 @@
         codeText.textContent = code;
         
         // 添加点击预览功能
-        barcodeContainer.style.cursor = 'pointer';
-        barcodeContainer.addEventListener('click', () => {
-          const modal = document.createElement('div');
-          modal.className = 'preview-modal';
-          modal.innerHTML = `
-            <div class="modal-content">
-              <button class="modal-close">&times;</button>
-              <h3 class="text-xl font-bold mb-4">条形码预览</h3>
-              <div class="mb-4" style="max-width: 100%;"><canvas id="preview-barcode" style="transform: scale(2); transform-origin: center;"></canvas></div>
-              <p class="text-gray-700 font-medium">${code}</p>
-            </div>
-          `;
-          
-          // 重新绘制放大的条形码
-          const previewCanvas = modal.querySelector('#preview-barcode');
-          JsBarcode(previewCanvas, code, {
-            format: "CODE128",
-            width: 2,
-            height: 120, // 放大高度
-            displayValue: false
-          });
-          
-          // 关闭按钮
-          const closeBtn = modal.querySelector('.modal-close');
-          closeBtn.addEventListener('click', () => {
-            modal.remove();
-          });
-          
-          // 点击背景关闭
-          modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-              modal.remove();
+          barcodeContainer.style.cursor = 'pointer';
+          barcodeContainer.addEventListener('click', () => {
+            const modal = document.createElement('div');
+            modal.className = 'preview-modal';
+            modal.innerHTML = `
+              <div class="modal-content">
+                <button class="modal-close">&times;</button>
+                <h3 class="text-xl font-bold mb-4">条形码预览</h3>
+                <div class="barcode-preview-container">
+                  <canvas id="preview-barcode"></canvas>
+                  <div class="size-control">
+                    <label for="size-slider">调整大小: <span id="size-value">200</span>%</label>
+                    <input type="range" id="size-slider" min="50" max="300" value="200">
+                  </div>
+                </div>
+                <p class="text-gray-700 font-medium">${code}</p>
+              </div>
+            `;
+            
+            // 获取元素
+            const previewCanvas = modal.querySelector('#preview-barcode');
+            const sizeSlider = modal.querySelector('#size-slider');
+            const sizeValue = modal.querySelector('#size-value');
+            
+            // 初始绘制条形码
+            let currentScale = 2.0; // 初始200%缩放
+            updateBarcodeSize(currentScale);
+            
+            // 更新条形码大小的函数
+            function updateBarcodeSize(scale) {
+              // 清除Canvas并重新绘制
+              const ctx = previewCanvas.getContext('2d');
+              ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+              
+              // 设置缩放
+              previewCanvas.style.transform = `scale(${scale})`;
+              previewCanvas.style.transformOrigin = 'center';
+              
+              // 重新生成条形码
+              JsBarcode(previewCanvas, code, {
+                format: "CODE128",
+                width: 2,
+                height: 120,
+                displayValue: false
+              });
             }
-          });
-          
-          // ESC键关闭
-          document.addEventListener('keydown', function handleEsc(e) {
-            if (e.key === 'Escape') {
+            
+            // 监听滑块变化
+            sizeSlider.addEventListener('input', () => {
+              const scale = parseInt(sizeSlider.value) / 100;
+              sizeValue.textContent = sizeSlider.value;
+              updateBarcodeSize(scale);
+            });
+            
+            // 关闭按钮
+            const closeBtn = modal.querySelector('.modal-close');
+            closeBtn.addEventListener('click', () => {
               modal.remove();
-              document.removeEventListener('keydown', handleEsc);
-            }
+            });
+            
+            // 点击背景关闭
+            modal.addEventListener('click', (e) => {
+              if (e.target === modal) {
+                modal.remove();
+              }
+            });
+            
+            // ESC键关闭
+            document.addEventListener('keydown', function handleEsc(e) {
+              if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', handleEsc);
+              }
+            });
+            
+            document.body.appendChild(modal);
           });
-          
-          document.body.appendChild(modal);
-        });
 
         barcodeContainer.appendChild(canvas);
         barcodeContainer.appendChild(codeText);
